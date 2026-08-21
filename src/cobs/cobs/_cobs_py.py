@@ -65,6 +65,8 @@ def decode(in_bytes):
     is invalid."""
     if isinstance(in_bytes, str):
         raise TypeError('Unicode-objects are not supported; byte buffer objects only')
+    if 0 in in_bytes:
+        raise DecodeError("zero byte found in input")
     in_bytes_mv = _get_buffer_view(in_bytes)
     out_bytes = bytearray()
     idx = 0
@@ -77,8 +79,6 @@ def decode(in_bytes):
             idx += 1
             end = idx + length - 1
             copy_mv = in_bytes_mv[idx:end]
-            if 0 in copy_mv:
-                raise DecodeError("zero byte found in input")
             out_bytes += copy_mv
             idx = end
             if idx > len(in_bytes_mv):
