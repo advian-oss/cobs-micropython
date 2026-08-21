@@ -11,9 +11,9 @@ class DecodeError(Exception):
 
 def _get_buffer_view(in_bytes):
     mv = memoryview(in_bytes)
-    if mv.ndim > 1 or mv.itemsize > 1:
-        raise BufferError('object must be a single-dimension buffer of bytes.')
     try:
+        if mv.ndim > 1 or mv.itemsize > 1:
+            raise BufferError('object must be a single-dimension buffer of bytes.')
         if mv.format != 'B':
             mv = mv.cast('B')
     except AttributeError:
@@ -22,12 +22,12 @@ def _get_buffer_view(in_bytes):
 
 def encode(in_bytes):
     """Encode a string using Consistent Overhead Byte Stuffing (COBS).
-    
+
     Input is any byte string. Output is also a byte string.
-    
+
     Encoding guarantees no zero bytes in the output. The output
     string will be expanded slightly, by a predictable amount.
-    
+
     An empty string is encoded to '\\x01'"""
     if isinstance(in_bytes, str):
         raise TypeError('Unicode-objects must be encoded as bytes first')
@@ -57,10 +57,10 @@ def encode(in_bytes):
 
 def decode(in_bytes):
     """Decode a string using Consistent Overhead Byte Stuffing (COBS).
-    
+
     Input should be a byte string that has been COBS encoded. Output
     is also a byte string.
-    
+
     A cobs.DecodeError exception will be raised if the encoded data
     is invalid."""
     if isinstance(in_bytes, str):

@@ -11,9 +11,9 @@ class DecodeError(Exception):
 
 def _get_buffer_view(in_bytes):
     mv = memoryview(in_bytes)
-    if mv.ndim > 1 or mv.itemsize > 1:
-        raise BufferError('object must be a single-dimension buffer of bytes.')
     try:
+        if mv.ndim > 1 or mv.itemsize > 1:
+            raise BufferError('object must be a single-dimension buffer of bytes.')
         if mv.format != 'B':
             mv = mv.cast('B')
     except AttributeError:
